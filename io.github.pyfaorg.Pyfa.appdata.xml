@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop-application">
+  <id>io.github.pyfaorg.Pyfa</id>
+  <metadata_license>CC-BY-SA-3.0</metadata_license>
+  <project_license>GPL-3</project_license>
+  <content_rating type="oars-1.1"/>
+  <developer_name>Anton Vorobyov</developer_name>
+  <name>Pyfa</name>
+  <summary>Python Fitting Assistant for EVE Online</summary>
+  <description>
+    <p>Pyfa, short for python fitting assistant, allows you to create, experiment with, and save ship fittings without being in game.</p>
+  </description>
+  <categories>
+    <category>Utility</category>
+  </categories>
+  <url type="homepage">https://github.com/pyfa-org/Pyfa</url>
+  <launchable type="desktop-id">io.github.pyfaorg.Pyfa.desktop</launchable>
+  <provides>
+    <binary>pyfa</binary>
+  </provides>
+  <releases>
+    <release version="2.5.0" date="2023-02-22" />
+  </releases>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/e-user/flatpak-ausweisapp2/master/ausweisapp-main.png</image>
+      <caption>Main Window</caption>
+    </screenshot>
+  </screenshots>
+</component>

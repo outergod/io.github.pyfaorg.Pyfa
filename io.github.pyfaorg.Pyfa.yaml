@@ -1,0 +1,124 @@
+app-id: io.github.pyfaorg.Pyfa
+runtime: org.freedesktop.Platform
+runtime-version: "22.08"
+sdk: org.freedesktop.Sdk
+command: pyfa
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+  build-args:
+    - --share=network
+  env:
+    CARGO_HOME: /run/build/rust-flatpak/cargo
+
+finish-args:
+  - --device=dri
+  - --socket=x11
+  - --socket=pulseaudio
+  - --share=network
+
+modules:
+  - name: python
+    config-opts:
+      - --enable-optimizations
+      - --with-lto
+      - --enable-shared
+    sources:
+      - type: archive
+        url: https://www.python.org/ftp/python/3.7.16/Python-3.7.16.tar.xz
+        sha512: 8e650226a3e9304e144ac19bd67bf04d96ea24b770b25a462dd5b2c4de6673bc2980cd8bd89fd2880d2192fa2b80eb070f9f7cd4cd83a0169ec2e8a868a243ff
+        x-checker-data:
+          type: anitya
+          stable-only: true
+          project-id: 13254
+          url-template: https://www.python.org/ftp/python/$version/Python-$version.tar.xz
+    post-install:
+      - chmod 755 ${FLATPAK_DEST}/lib/libpython*.so
+
+  - name: cython
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/dc/f6/e8e302f9942cbebede88b1a0c33d0be3a738c3ac37abae87254d58ffc51c/Cython-0.29.33.tar.gz
+        sha256: 5040764c4a4d2ce964a395da24f0d1ae58144995dab92c6b96f44c3f4d72286a
+    buildsystem: simple
+    build-commands:
+      - "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"Cython==0.29.33\" --no-build-isolation"
+
+  - name: wheel
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/a2/b8/6a06ff0f13a00fc3c3e7d222a995526cbca26c1ad107691b6b1badbbabf1/wheel-0.38.4.tar.gz
+        sha256: 965f5259b566725405b05e7cf774052044b1ed30119b5d586b2703aafe8719ac
+    buildsystem: simple
+    build-commands:
+      - "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"wheel==0.38.4\" --no-build-isolation"
+
+  - name: six
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e/six-1.16.0.tar.gz
+        sha256: 1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926
+    buildsystem: simple
+    build-commands:
+      - "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"six==1.16.0\" --no-build-isolation"
+
+  - name: pathlib2
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/31/51/99caf463dc7c18eb18dad1fffe465a3cf3ee50ac3d1dccbd1781336fe9c7/pathlib2-2.3.7.post1.tar.gz
+        sha256: 9fe0edad898b83c0c3e199c842b27ed216645d2e177757b2dd67384d4113c641
+    buildsystem: simple
+    build-commands:
+      - "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"pathlib2==2.3.7.post1\" --no-build-isolation"
+
+  - name: setuptools
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/d6/6f/9d257b50d60f67d0b54b88fb39d4a9bade8406d4a926da3e4f05bf04f38b/setuptools-67.3.3.tar.gz
+        sha256: ed4e75fafe103c79b692f217158ba87edf38d31004b9dbc1913debb48793c828
+    buildsystem: simple
+    build-commands:
+      - "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"setuptools==67.3.3\" --no-build-isolation"
+
+  - python3-requirements-2.json
+
+  - name: setuptools
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/06/51/8f2aa4b85f2fb394af0d440fc9a35747a1aeab27214f6e6f7d02e3b43719/setuptools-43.0.0.zip
+        sha256: db45ebb4a4b3b95ff0aca3ce5fe1e820ce17be393caf8902c78aa36240e8c378
+    buildsystem: simple
+    build-commands:
+      - "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"setuptools==43.0.0\" --no-build-isolation"
+
+  - python3-requirements-1.json
+
+  - name: pyfa
+    sources:
+      - type: archive
+        url: https://github.com/pyfa-org/Pyfa/archive/refs/tags/v2.50.0.tar.gz
+        sha512: 2d2231ec2885ffac3cace50c3edb62ba35d5ad12dc4163f1adee01118511bd251c01e7b4cf475085ec8d001b0889d05a8802b8f69dc0c8694c08321ed59e16c2
+      - type: script
+        dest-filename: pyfa.sh
+        commands:
+          - exec python3 -s /app/share/pyfa.py "$@"
+      - type: file
+        path: io.github.pyfaorg.Pyfa.appdata.xml
+      - type: file
+        path: io.github.pyfaorg.Pyfa.desktop
+    buildsystem: simple
+    build-commands:
+      - find locale/ -type f -name "*.po" -exec msgen "{}" -o "{}" \;
+      - python3 scripts/compile_lang.py
+      - python3 db_update.py
+
+      - find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+      - mkdir -p ${FLATPAK_DEST}/share
+      - cp -r eos graphs gui imgs locale service utils eve.db config.py pyfa.py db_update.py README.md LICENSE version.yml ${FLATPAK_DEST}/share
+
+      - install -Dm 755 pyfa.sh ${FLATPAK_DEST}/bin/pyfa
+
+      - install -D io.github.pyfaorg.Pyfa.appdata.xml ${FLATPAK_DEST}/share/appdata/${FLATPAK_ID}.appdata.xml
+      - install -D io.github.pyfaorg.Pyfa.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - install -D imgs/gui/pyfa64.png ${FLATPAK_DEST}/share/icons/hicolor/64x64/apps/${FLATPAK_ID}.png
