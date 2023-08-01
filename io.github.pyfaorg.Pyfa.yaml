@@ -1,7 +1,7 @@
 app-id: io.github.pyfaorg.Pyfa
-runtime: org.freedesktop.Platform
-runtime-version: "22.08"
-sdk: org.freedesktop.Sdk
+runtime: org.gnome.Platform
+runtime-version: "44"
+sdk: org.gnome.Sdk
 command: pyfa
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -17,6 +17,8 @@ finish-args:
   - --socket=x11
   - --socket=pulseaudio
   - --share=network
+  - --filesystem=~/.pyfa
+  - --filesystem=xdg-run/at-spi
 
 modules:
   - name: python
@@ -97,8 +99,8 @@ modules:
   - name: pyfa
     sources:
       - type: archive
-        url: https://github.com/pyfa-org/Pyfa/archive/refs/tags/v2.50.0.tar.gz
-        sha512: 2d2231ec2885ffac3cace50c3edb62ba35d5ad12dc4163f1adee01118511bd251c01e7b4cf475085ec8d001b0889d05a8802b8f69dc0c8694c08321ed59e16c2
+        url: https://github.com/pyfa-org/Pyfa/archive/refs/tags/v2.53.0.tar.gz
+        sha512: 5f304ed27be255c03f284f273be497974b130b838bfcb052cf13e0aa9160ef6e4de6e2c83e4414e5fd8fe400748f6889316cad10a58e1f050535f55a78915a81
       - type: script
         dest-filename: pyfa.sh
         commands:
